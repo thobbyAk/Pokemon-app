@@ -2,10 +2,8 @@ import React from "react";
 import "./card.css";
 
 function Card({ pokemonData }) {
-	// console.log("pokemonData,", pokemonData);
-
 	return (
-		<div>
+		<div data-testid="pokemeonCard">
 			<div className="pokemeonCard">
 				<h3>{pokemonData?.id}</h3>
 				<img

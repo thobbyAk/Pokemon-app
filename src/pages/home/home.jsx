@@ -9,13 +9,23 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 function Home() {
+	//sets value of resest button to false on pageload
+	const [showReset, setShowReset] = useState(false);
+	//sets value of loader component to false on pageload
 	const [loading, setLoading] = useState(false);
+	//sets value of loader component for all pokemons to false on pageload
 	const [loadingData, setLoadingData] = useState(false);
+	//sets default of the url for the fetch pokemon api
 	const [url, setUrl] = useState("https://pokeapi.co/api/v2/pokemon/");
+	//sets default value for pokemon data
 	const [pokemonData, setPokemonData] = useState([]);
+	//sets default pokemon name
 	const [pokemonName, setPokemonName] = useState("");
-
+	//sets default pokemon filter name for pokemon data
+	const [filterName, setFilterName] = useState("");
+	//sets default boolean value for pokemon data availability
 	const [pokemonAvailable, setPokemonAvailable] = useState(true);
+	// sets default pokemon details object structure
 	const [pokemonDetails, setPokemonDetails] = useState({
 		name: "",
 		species: "",
@@ -25,16 +35,20 @@ function Home() {
 		attack: "",
 		defense: "",
 	});
+	//sets default of the url for the fetch pokemon api next response
 	const [nextUrl, setNextUrl] = useState("");
+	//sets default of the url for the fetch pokemon api previous response
 	const [prevUrl, setPrevUrl] = useState("");
 
+	// fetch all pokemon data fro api
 	const getAllPokemon = async () => {
+		setShowReset(false);
 		setLoadingData(true);
+		setFilterName("");
 		await axios
 			.get(url)
 			.then((response) => {
 				if (response) {
-					// console.log("GRE", response?.data);
 					setNextUrl(response?.data?.next);
 					setPrevUrl(response?.data?.previous);
 					sortPokemonData(response?.data?.results);
@@ -43,11 +57,11 @@ function Home() {
 			})
 			.catch(function (error) {
 				if (error.response) {
-					// console.log("response");
 				}
 			});
 	};
 
+	// fetch each pokemon data based on the url and sort the data in an inreasing order based on id
 	const sortPokemonData = async (res) => {
 		res.map(async (item) => {
 			const result = await axios.get(item.url);
@@ -57,26 +71,26 @@ function Home() {
 				const uniqueObjects = [
 					...new Map(state.map((item) => [item.id, item])).values(),
 				];
-				// console.log("uniqueObjects,", uniqueObjects);
 
 				return uniqueObjects;
 			});
 		});
 	};
 
+	//filter pokemon data based on name inputed in the search field
 	const filterPokemonName = (name) => {
 		let newArray = pokemonData.filter((item) =>
 			item.species.name.includes(name.toLowerCase())
 		);
 		setPokemonData(newArray);
-		// console.log(newArray);
+		setShowReset(true);
 	};
 
+	//search pokemon data based on name inputed in the search field
 	const searchPokemon = () => {
 		setLoading(true);
 		BaseRoutesService.searchMethod(pokemonName)
 			.then((response) => {
-				// console.log("polk", response);
 				if (response) {
 					setPokemonAvailable(true);
 					setPokemonDetails({
@@ -101,9 +115,11 @@ function Home() {
 				}
 			});
 	};
+
 	useEffect(() => {
 		getAllPokemon();
 	}, [url]);
+
 	return (
 		<div className="grid-container" data-testid="parent">
 			<div className="grid-item-1">
@@ -111,6 +127,7 @@ function Home() {
 					<h3 className="title">Find your pokemon</h3>
 
 					<input
+						placeholder="Enter pokemon fullname"
 						data-testid="search-input"
 						type="text"
 						onChange={(event) => {
@@ -132,7 +149,7 @@ function Home() {
 						<>
 							{pokemonAvailable ? (
 								<>
-									<div className="">
+									<div data-testid="newchild">
 										{pokemonName ? (
 											<>
 												<h4>{pokemonName} </h4>
@@ -171,11 +188,14 @@ function Home() {
 					<input
 						data-testid="filter-input"
 						type="text"
-						placeholder="Search"
+						placeholder="Filter pokemon by name"
+						value={filterName}
 						onChange={(event) => {
 							filterPokemonName(event.target.value);
+							setFilterName(event.target.value);
 						}}
 					/>
+					{showReset && <button onClick={getAllPokemon}>Reset</button>}
 				</div>
 				{loadingData ? (
 					<div role="alertDialog" className="grid-loader">

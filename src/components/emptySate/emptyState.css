@@ -1,8 +1,8 @@
-.empty{
+.empty {
     display: flex;
     justify-content: center;
 }
-h4{
+h4 {
     text-align: center;
     font-size: 28px;
 }

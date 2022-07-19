@@ -1,40 +1,7 @@
 import React from "react";
-import {
-	render,
-	waitForElementToBeRemoved,
-	screen,
-	within,
-} from "@testing-library/react";
+import { render, screen, within, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Home from "./home";
-import Card from "../../components/card/card";
-
-let mockpokemonData = [
-	{
-		id: 1,
-		species: {
-			name: "bulbasaur",
-		},
-		sprites: {
-			front_default:
-				"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png",
-		},
-		weight: 61,
-		height: 4,
-	},
-	{
-		id: 2,
-		species: {
-			name: "ninetales",
-		},
-		sprites: {
-			front_default:
-				"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png",
-		},
-		weight: 69,
-		height: 7,
-	},
-];
 
 describe("<Home/>", () => {
 	test("render home", () => {
@@ -55,20 +22,35 @@ describe("<Home/>", () => {
 		userEvent.click(searchBtn);
 
 		//Loading state displays and gets removed once results are displayed
-		await waitForElementToBeRemoved(() => screen.getByRole("alert"));
+		await waitFor(() => screen.getByTestId("newchild"), {
+			timeout: 10000,
+		});
 
 		expect(screen.getByText("Number: 38")).toBeInTheDocument();
 	});
 	test("should render card component in the parent component ", async () => {
 		const { getByTestId } = await render(<Home />);
 		const parent = getByTestId("parent");
-		await waitForElementToBeRemoved(() => screen.getByRole("alertDialog"));
+		await waitFor(() => screen.getByTestId("child"), {
+			timeout: 10000,
+		});
 		const child = getByTestId("child");
 
 		expect(child).not.toContainElement(parent);
 		expect(within(parent).queryByTestId("child")).not.toBeNull();
-		// const inputEl = screen.getByTestId("search-input");
-		// userEvent.type(inputEl, "ninetales");
-		// expect(screen.getByTestId("search-input")).toHaveValue("ninetales");
+	});
+	test("should be able to filter pokemondata", async () => {
+		render(<Home />);
+		await waitFor(() => screen.getByTestId("child"), {
+			timeout: 10000,
+		});
+		const inputEl = screen.getByTestId("filter-input");
+		userEvent.type(inputEl, "bulbasaur");
+		expect(screen.getByTestId("filter-input")).toHaveValue("bulbasaur");
+		const newCards = await within(screen.getByTestId("child")).findAllByTestId(
+			"pokemeonCard"
+		);
+
+		expect(newCards.length).toBeGreaterThanOrEqual(1);
 	});
 });
