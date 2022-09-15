@@ -8,14 +8,13 @@
     align-items: center;
     justify-content: space-between;
     box-sizing: border-box;
+    &__Number{
+        color: #ffffff;
+
+    }
+    &__Title {
+        color: #ffffff;
+
+    }
 }
-.pokemeonCard h3 {
-    color: #ffffff;
-}
-.loaderBody {
-    width: 100%;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+

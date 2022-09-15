@@ -1,11 +1,11 @@
 import React from "react";
-import "./emptyState.css";
+import "./emptyState.scss";
 
 function EmptyState() {
 	return (
 		<>
 			<div className="empty">
-				<h4>No pokemon Available</h4>
+				<p className="empty__title">No pokemon Available</p>
 			</div>
 		</>
 	);

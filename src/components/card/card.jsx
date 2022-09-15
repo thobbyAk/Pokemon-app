@@ -1,16 +1,17 @@
 import React from "react";
-import "./card.css";
+import "./card.scss";
 
 function Card({ pokemonData }) {
 	return (
 		<div data-testid="pokemeonCard">
 			<div className="pokemeonCard">
-				<h3>{pokemonData?.id}</h3>
+				<span className="pokmanCard__Number">{pokemonData?.id}</span>
 				<img
+					className="pokemonCard__Image"
 					src={pokemonData?.sprites?.front_default}
 					alt={pokemonData?.sprites?.front_default}
 				/>
-				<h3>{pokemonData?.name}</h3>
+				<h1 className="pokemonCard__Title">{pokemonData?.name}</h1>
 			</div>
 		</div>
 	);

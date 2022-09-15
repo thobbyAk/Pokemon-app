@@ -4,28 +4,19 @@ import EmptyState from "../../components/emptySate/empyState";
 import Loader from "../../components/loader/loader";
 import BaseRoutesService from "../../services/routes.ts";
 import axios from "axios";
-import "./home.css";
+import "./home.scss";
 import { useState } from "react";
 import { useEffect } from "react";
 
 function Home() {
-	//sets value of resest button to false on pageload
 	const [showReset, setShowReset] = useState(false);
-	//sets value of loader component to false on pageload
 	const [loading, setLoading] = useState(false);
-	//sets value of loader component for all pokemons to false on pageload
 	const [loadingData, setLoadingData] = useState(false);
-	//sets default of the url for the fetch pokemon api
 	const [url, setUrl] = useState("https://pokeapi.co/api/v2/pokemon/");
-	//sets default value for pokemon data
 	const [pokemonData, setPokemonData] = useState([]);
-	//sets default pokemon name
 	const [pokemonName, setPokemonName] = useState("");
-	//sets default pokemon filter name for pokemon data
 	const [filterName, setFilterName] = useState("");
-	//sets default boolean value for pokemon data availability
 	const [pokemonAvailable, setPokemonAvailable] = useState(true);
-	// sets default pokemon details object structure
 	const [pokemonDetails, setPokemonDetails] = useState({
 		name: "",
 		species: "",
@@ -35,9 +26,9 @@ function Home() {
 		attack: "",
 		defense: "",
 	});
-	//sets default of the url for the fetch pokemon api next response
+
 	const [nextUrl, setNextUrl] = useState("");
-	//sets default of the url for the fetch pokemon api previous response
+
 	const [prevUrl, setPrevUrl] = useState("");
 
 	// fetch all pokemon data fro api
