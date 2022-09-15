@@ -17,15 +17,7 @@ function Home() {
 	const [pokemonName, setPokemonName] = useState("");
 	const [filterName, setFilterName] = useState("");
 	const [pokemonAvailable, setPokemonAvailable] = useState(true);
-	const [pokemonDetails, setPokemonDetails] = useState({
-		name: "",
-		species: "",
-		img: "",
-		number: "",
-		type: "",
-		attack: "",
-		defense: "",
-	});
+	const [pokemonDetails, setPokemonDetails] = useState({});
 
 	const [nextUrl, setNextUrl] = useState("");
 
@@ -80,19 +72,11 @@ function Home() {
 	//search pokemon data based on name inputed in the search field
 	const searchPokemon = () => {
 		setLoading(true);
-		BaseRoutesService.searchMethod(pokemonName)
+		BaseRoutesService.searchMethod(pokemonName.toLowerCase())
 			.then((response) => {
 				if (response) {
 					setPokemonAvailable(true);
-					setPokemonDetails({
-						name: pokemonName,
-						species: response?.data.species.name,
-						img: response?.data.sprites.front_default,
-						type: response?.data.types[0].type.name,
-						number: response?.data?.id,
-						attack: response?.data?.stats[1].base_stat,
-						defense: response?.data?.stats[2].base_stat,
-					});
+					setPokemonDetails(response.data);
 					setLoading(false);
 				} else {
 					setPokemonAvailable(false);
@@ -112,10 +96,10 @@ function Home() {
 	}, [url]);
 
 	return (
-		<div className="grid-container" data-testid="parent">
-			<div className="grid-item-1">
-				<div className="pokemonTop">
-					<h3 className="title">Find your pokemon</h3>
+		<div className="grid__container" data-testid="parent">
+			<div className="grid__item--primary">
+				<div className="grid__pokemonTop">
+					<h3 className="grid__title">Find your pokemon</h3>
 
 					<input
 						placeholder="Enter pokemon fullname"
@@ -131,51 +115,27 @@ function Home() {
 						Search
 					</button>
 				</div>
-				<div className="pokemonBody">
+				<div className="grid__pokemonBody">
 					{loading ? (
-						<div role="alert" className="loaderBody">
+						<div role="alert" className="grid__loaderBody">
 							<Loader />
 						</div>
 					) : (
 						<>
 							{pokemonAvailable ? (
-								<>
-									<div data-testid="newchild">
-										{pokemonName ? (
-											<>
-												<h4>{pokemonName} </h4>
-
-												<h6>Species: {pokemonDetails?.species}</h6>
-												<img src={pokemonDetails?.img} alt={pokemonDetails?.img} />
-
-												<h6>Number: {pokemonDetails?.number}</h6>
-												<h6>Type: {pokemonDetails?.type}</h6>
-												<h6>Attack: {pokemonDetails?.attack}</h6>
-												<h6>Defense: {pokemonDetails?.defense}</h6>
-											</>
-										) : (
-											<>
-												<h3>Please enter a pokemon name</h3>
-											</>
-										)}
-									</div>
-								</>
+								<div data-testid="newchild">
+									<Card pokemonData={pokemonDetails} />
+								</div>
 							) : (
-								<>
-									{pokemonName && (
-										<>
-											<EmptyState />
-										</>
-									)}
-								</>
+								<>{pokemonName && <EmptyState />}</>
 							)}
 						</>
 					)}
 				</div>
 			</div>
-			<div className="grid-item">
-				<h3 className="headerText">All Pokemons</h3>
-				<div className="search">
+			<div className="grid__item">
+				<h3 className="grid__title">All Pokemons</h3>
+				<div className="grid__search">
 					<input
 						data-testid="filter-input"
 						type="text"
@@ -189,39 +149,41 @@ function Home() {
 					{showReset && <button onClick={getAllPokemon}>Reset</button>}
 				</div>
 				{loadingData ? (
-					<div role="alertDialog" className="grid-loader">
+					<div role="alertDialog" className="grid__loader">
 						<Loader />
 					</div>
 				) : (
 					<>
-						<div className="cardView" data-testid="child">
+						<div className="grid__cardView" data-testid="child">
 							{pokemonData.map((data) => {
 								return <Card key={data.id} pokemonData={data} />;
 							})}
 						</div>
-						<div className="buttons">
-							{prevUrl && (
-								<button
-									onClick={() => {
-										setPokemonData([]);
-										setUrl(prevUrl);
-									}}
-								>
-									Previous
-								</button>
-							)}
+						{pokemonData.length > 0 && (
+							<div className="grid__buttons">
+								{prevUrl && (
+									<button
+										onClick={() => {
+											setPokemonData([]);
+											setUrl(prevUrl);
+										}}
+									>
+										Previous
+									</button>
+								)}
 
-							{nextUrl && (
-								<button
-									onClick={() => {
-										setPokemonData([]);
-										setUrl(nextUrl);
-									}}
-								>
-									Next
-								</button>
-							)}
-						</div>
+								{nextUrl && (
+									<button
+										onClick={() => {
+											setPokemonData([]);
+											setUrl(nextUrl);
+										}}
+									>
+										Next
+									</button>
+								)}
+							</div>
+						)}
 					</>
 				)}
 			</div>

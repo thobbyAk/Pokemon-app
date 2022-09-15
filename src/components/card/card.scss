@@ -1,20 +1,45 @@
-.pokemeonCard {
-    width: 300px;
-    background-color:#3b79c4;
-    border-radius: 1rem;
-    box-shadow: 0 5px 5px rgba(0,0,0,0.5);
-    padding: 0 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-sizing: border-box;
+@import '../../styles/index.scss';
+
+.pokemeon {
+    &__wrapper{
+        position: relative;
+        max-width: 20rem;
+        margin: 0 auto;
+        background-color: transparent;
+        border: 1px solid $brand-primary;
+        border-radius: 1rem;
+    
+    }
+    &__card{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 10rem;
+        width: 14rem;
+        padding: 2rem;
+        background-color: transparent;
+    }
     &__Number{
-        color: #ffffff;
+        text-align: center;
+        align-self: center;
+        display: inline-flex;
+        align-items: center;
+        min-width: fit-content;
+        padding: 0.125rem 0.75rem;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        color: $white;
+        background-color: $brand-primary;
+        border-radius: 1rem;
 
     }
     &__Title {
-        color: #ffffff;
-
+        color: $white;
+        margin-top: 0.75rem;
+        margin-bottom: 1.25rem;
+        font-size: 2.25rem;
+        text-transform: capitalize;
     }
 }
 

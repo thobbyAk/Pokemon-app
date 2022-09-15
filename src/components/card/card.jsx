@@ -3,15 +3,15 @@ import "./card.scss";
 
 function Card({ pokemonData }) {
 	return (
-		<div data-testid="pokemeonCard">
-			<div className="pokemeonCard">
-				<span className="pokmanCard__Number">{pokemonData?.id}</span>
+		<div data-testid="pokemeonCard" className="pokemeon__wrapper">
+			<div className="pokemeon__card">
+				<span className="pokemeon__Number">#{pokemonData?.id}</span>
 				<img
-					className="pokemonCard__Image"
+					className="pokemon__Image"
 					src={pokemonData?.sprites?.front_default}
 					alt={pokemonData?.sprites?.front_default}
 				/>
-				<h1 className="pokemonCard__Title">{pokemonData?.name}</h1>
+				<p className="pokemeon__Title">{pokemonData?.name}</p>
 			</div>
 		</div>
 	);

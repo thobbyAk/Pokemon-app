@@ -26,7 +26,7 @@ describe("<Home/>", () => {
 			timeout: 10000,
 		});
 
-		expect(screen.getByText("Number: 38")).toBeInTheDocument();
+		expect(screen.getByText("#38")).toBeInTheDocument();
 	});
 	test("should render card component in the parent component ", async () => {
 		const { getByTestId } = await render(<Home />);
